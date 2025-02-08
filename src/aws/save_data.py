@@ -2,7 +2,18 @@ import boto3
 import json
 import zipfile
 import os
+import time
+from decimal import Decimal
 
+def decimal_to_float(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    elif isinstance(obj, dict):
+        return {key: decimal_to_float(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [decimal_to_float(item) for item in obj]
+    else:
+        return obj
 
 def main():
 
@@ -20,12 +31,24 @@ def main():
     response_payload = json.loads(json.loads(response['Payload'].read())['body'])
 
     response_payload['ArticleID'] = response_payload.get('ArticleID')  
+    response_payload['Timestamp'] = int(time.time())  # Add a timestamp to track item age
 
     table.put_item(Item=response_payload)
 
     response = table.scan()
+    items = response['Items']
+
+    items.sort(key=lambda x: x['Timestamp'])
+
+    if len(items) > 20:
+        items_to_delete = items[:len(items) - 20]  
+        for item in items_to_delete:
+            article_id = item['ArticleID']  
+            table.delete_item(Key={'ArticleID': article_id}) 
+            print(f"Deleted item with ArticleID: {article_id}")
 
     for item in response['Items']:
+        item = decimal_to_float(item)
         print(json.dumps(item, indent=4))  # Pretty print each item
 
 if __name__ == "__main__":

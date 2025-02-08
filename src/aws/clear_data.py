@@ -12,11 +12,11 @@ items = response.get('Items', [])
 for item in items:
     table.delete_item(
         Key={
-            'ArticleID': item['YourPartitionKey'],  # Replace with the actual partition key name
+            'ArticleID': item['ArticleID'],  # Replace with the actual partition key name
         }
     )
 
-    print(f"Deleted item with Partition Key: {item['YourPartitionKey']}")
+    print(f"Deleted item with Partition Key: {item['ArticleID']}")
 
 while 'LastEvaluatedKey' in response:
     response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
@@ -25,7 +25,7 @@ while 'LastEvaluatedKey' in response:
     for item in items:
         table.delete_item(
             Key={
-                'ArticleID': item['YourPartitionKey'],
+                'ArticleID': item['ArticleID'],
             }
         )
-        print(f"Deleted item with Partition Key: {item['YourPartitionKey']}")
+        print(f"Deleted item with Partition Key: {item['ArticleID']}")

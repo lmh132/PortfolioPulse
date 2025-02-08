@@ -44,12 +44,18 @@ except iam_client.exceptions.EntityAlreadyExistsException:
 
 role_arn = role['Role']['Arn']
 
+
 lambda_function_code = """
 import json
 
+article_id_counter = 1
 def lambda_handler(event, context):
+    global article_id_counter 
+
+    article_id = str(article_id_counter)
+    article_id_counter += 1  
     response = {
-        "ArticleID" : "001", 
+        "ArticleID" : article_id, 
         "Source" : "Bloomberg",
         "Title" : "Dummy Title", 
         "Author" : "Taein Kim", 
