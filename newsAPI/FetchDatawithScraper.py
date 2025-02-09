@@ -1,10 +1,29 @@
 import requests
+from bs4 import BeautifulSoup
 import json
 import re
 from datetime import datetime, timedelta, timezone
 
-def fetch_articles(company, api_key, page_size=50, language='en', use_top_headlines=False):
-    sources = ["cnbc.com", "bloomberg.com", "cnn.com", "apnews.com", "fidelity.com"]
+SCRAPERAPI_KEY = 'b93d606b6bee433fbbf1a25fac1836b5'
+
+def fetch_full_content(url):
+    api_url = f'http://api.scraperapi.com?api_key={SCRAPERAPI_KEY}&url={url}'
+    try:
+        response = requests.get(api_url, timeout=60)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            paragraphs = soup.find_all('p')
+            full_text = ' '.join([para.get_text() for para in paragraphs])
+            return full_text
+        else:
+            print(f"Failed to fetch {url}: Status code {response.status_code}")
+            return "Content not available"
+    except Exception as e:
+        print(f"Error fetching {url}: {e}")
+        return "Content not available"
+
+def fetch_articles(company, api_key, page_size=5, language='en', use_top_headlines=False):
+    sources = ["cnbc.com", "bloomberg.com", "apnews.com"]
     articles_by_source = {source: [] for source in sources}
     
     for source in sources:
@@ -50,6 +69,11 @@ def process_articles(articles_by_source, industry, company):
     for source, articles in articles_by_source.items():
         for idx, article in enumerate(articles):
             description = article.get("description", "No Description")
+            if description:
+                description = description.split(" [+")[0]
+            
+            full_content = fetch_full_content(article.get("url", ""))
+            
             processed.append({
                 "ArticleID": f"{company}_{source}_{idx+1}",
                 "Source": article.get("source", {}).get("name", "Unknown"),
@@ -61,7 +85,7 @@ def process_articles(articles_by_source, industry, company):
                 "Industry": industry,
                 "Company": company,
                 "TimePub": article.get("publishedAt", "No Publication Time"),
-                "Summary": clean_content(article.get("content", "No Content"))
+                "Summary": clean_content(full_content)
             })
     return processed
 
@@ -75,7 +99,7 @@ def aggregate_articles(companies, api_key, use_top_headlines=False):
     return all_articles
 
 def main():
-    API_KEY = "2fbe28be9c3945c48115598ea7c2835b"
+    API_KEY = "c976dc50759c4560bc121444ad0b82b1"
     use_top_headlines = False
     companies = {
         "Technology": ["Apple", "Microsoft", "Alphabet", "NVIDIA", "Meta"],
