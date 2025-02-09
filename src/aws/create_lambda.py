@@ -1,4 +1,6 @@
 
+# testing lambda function for the connection code. 
+
 import boto3
 import json
 import zipfile
@@ -67,6 +69,7 @@ def lambda_handler(event, context):
             "Author": "Taein Kim",
             "Description": "ABC",
             "URL": "www.google.com",
+            "ImageURL" : "dummy",
             "Industry": "Technology",
             "Company": "Google",
             "TimePub": "10:00",

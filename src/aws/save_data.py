@@ -49,7 +49,7 @@ def main():
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
     table = dynamodb.Table('DataLake') 
-    lambda_function_name = 'TestJsonFunction'
+    lambda_function_name = 'getNewsData'
 
     response = lambda_client.invoke(
         FunctionName=lambda_function_name,
@@ -57,8 +57,7 @@ def main():
     )
 
 
-    delete_data(dynamodb)
-
+    # delete_data(dynamodb)
     response_payload = json.loads(json.loads(response['Payload'].read())["body"])
     articles = response_payload
     
