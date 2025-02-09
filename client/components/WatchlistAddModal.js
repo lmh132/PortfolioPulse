@@ -9,7 +9,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -18,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -95,7 +93,11 @@ export const WatchlistAddModal = ({
               <Label htmlFor="stock" className="text-right">
                 Stock
               </Label>
-              <Popover open={comboboxOpen} onOpenChange={setComboboxOpen}>
+              <Popover
+                open={comboboxOpen}
+                onOpenChange={setComboboxOpen}
+                modal={false}
+              >
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -111,10 +113,16 @@ export const WatchlistAddModal = ({
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
+
+                <PopoverContent
+                  className="w-[200px] p-0" // Removed max-h & overflow-y from here
+                  onWheel={(e) => e.stopPropagation()}
+                >
                   <Command>
                     <CommandInput placeholder="Search stock..." />
-                    <CommandList>
+
+                    <CommandList className="max-h-60 overflow-y-auto">
+                      {/* Manage scrolling only here */}
                       <CommandEmpty>No stock found.</CommandEmpty>
                       <CommandGroup>
                         {availableStocks.map((stock, index) => (
@@ -128,6 +136,7 @@ export const WatchlistAddModal = ({
                               );
                               setComboboxOpen(false);
                             }}
+                            className="cursor-pointer"
                           >
                             <Check
                               className={cn(
