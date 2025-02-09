@@ -1,7 +1,9 @@
 "use client";
 
 import { initializeApp } from "firebase/app";
-import { createContext, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
+import { updateUser } from "@/utils/auth";
+import { auth } from "@/firebase/firebaseconfig";
 
 export const GlobalStateContext = createContext({});
 
@@ -17,6 +19,14 @@ export const GlobalStateProvider = ({ children }) => {
   const [industryList, setIndustryList] = useState([]);
   const [stockList, setStockList] = useState([]);
 
+  useEffect(() => {
+    if (auth.currentUser) {
+      updateUser(auth.currentUser.uid, {
+        companies: stockList,
+        industries: industryList,
+      });
+    }
+  }, [industryList, stockList]);
   return (
     <GlobalStateContext.Provider
       value={{

@@ -48,3 +48,34 @@ export async function getUser(uid) {
     console.error("Error storing user in AWS:", error);
   }
 }
+
+export async function updateUser(uid, params) {
+  try {
+    console.log(
+      JSON.stringify({
+        user_id: uid,
+        watchlist: params,
+      })
+    );
+    const response = await fetch(
+      `https://b6afxhw1s3.execute-api.us-east-1.amazonaws.com/dev/user`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          user_id: uid,
+          watchlist: params,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(response);
+
+    if (!response.ok) {
+      throw new Error(`Failed to update user in AWS: ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error("Error updating user in AWS:", error);
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -54,6 +54,7 @@ const signupSchema = z
   });
 
 export const LoginForm = () => {
+  const { setIndustryList, setStockList } = useContext(GlobalStateContext);
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -77,7 +78,9 @@ export const LoginForm = () => {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, values.email, values.password);
         const user = await getUser(auth.currentUser.uid);
-        console.log("Found user: ", user);
+        setIndustryList(user.industryList);
+        setStockList(user.stockList);
+        //console.log("Found user: ", user);
       } else {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
