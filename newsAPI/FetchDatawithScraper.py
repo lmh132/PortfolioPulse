@@ -22,7 +22,7 @@ def fetch_full_content(url):
         print(f"Error fetching {url}: {e}")
         return "Content not available"
 
-def fetch_articles(company, api_key, page_size=5, language='en', use_top_headlines=False):
+def fetch_articles(company, api_key, page_size=20, language='en', use_top_headlines=False):
     sources = ["cnbc.com", "bloomberg.com", "apnews.com"]
     articles_by_source = {source: [] for source in sources}
     
