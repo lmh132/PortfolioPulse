@@ -1,7 +1,14 @@
 from openai import OpenAI
 import google
 
-client = OpenAI(api_key="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")
+# Read text from a .key file and store it in a string
+file_path = "src/openai.key"  # Replace with your actual file path
+
+file = open(file_path, "r", encoding="utf-8")
+key_text = file.read()
+
+
+client = OpenAI(api_key=key_text)
 
 def get_response(text):
     prompt = """
