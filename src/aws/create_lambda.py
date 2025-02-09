@@ -50,25 +50,33 @@ import json
 
 article_id_counter = 1
 def lambda_handler(event, context):
-    global article_id_counter 
+    global article_id_counter
 
-    article_id = str(article_id_counter)
-    article_id_counter += 1  
-    response = {
-        "ArticleID" : article_id, 
-        "Source" : "Bloomberg",
-        "Title" : "Dummy Title", 
-        "Author" : "Taein Kim", 
-        "Description" : "ABC", 
-        "URL" : "www.google.com",
-        "Industry" : "Technology", 
-        "Company" : "Google", 
-        "TimePub" : "10:00"
-    }
-    
+    # Generate a list of article objects
+    articles = []
+
+    # Create multiple articles (you can change the number of articles)
+    for _ in range(5):  # This will generate 5 articles, modify as needed
+        article_id = str(article_id_counter)
+        article_id_counter += 1
+        
+        article = {
+            "ArticleID": article_id,
+            "Source": "Bloomberg",
+            "Title": "Dummy Title",
+            "Author": "Taein Kim",
+            "Description": "ABC",
+            "URL": "www.google.com",
+            "Industry": "Technology",
+            "Company": "Google",
+            "TimePub": "10:00",
+            "Summary": "hello"
+        }
+        
+        articles.append(article)
     return {
         'statusCode': 200,
-        'body': json.dumps(response)
+        'body': json.dumps(articles)
     }
 """
 
@@ -98,5 +106,4 @@ try:
 except lambda_client.exceptions.ResourceConflictException:
     print(f"Lambda function {lambda_function_name} already exists.")
 
-# Clean up the temporary zip file
 os.remove(zip_file_name)

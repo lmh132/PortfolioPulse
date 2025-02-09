@@ -28,12 +28,12 @@ def main():
         InvocationType='RequestResponse'
     )
 
-    response_payload = json.loads(json.loads(response['Payload'].read())['body'])
-
-    response_payload['ArticleID'] = response_payload.get('ArticleID')  
-    response_payload['Timestamp'] = int(time.time())  # Add a timestamp to track item age
-
-    table.put_item(Item=response_payload)
+    response_payload = json.loads(json.loads(response['Payload'].read())["body"])
+    articles = response_payload
+    
+    for article in articles:
+        article['Timestamp'] = int(time.time()) 
+        table.put_item(Item=article)
 
     response = table.scan()
     items = response['Items']
