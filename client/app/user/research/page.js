@@ -1,9 +1,17 @@
-const Research = () => {
+import { ChatComponent } from "@/components/ChatComponent";
+
+export default function ResearchLayout({ children }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      <h1 className="text-4xl font-bold">Welcome to the Research Page!</h1>
+    <div className="flex flex-col h-screen">
+      <header className="p-4">
+        <h1 className="text-white text-2xl font-bold mb-4">
+          Research Assistant
+        </h1>
+        <div className="text-black h-[calc(100vh-120px)]">
+          <ChatComponent />
+        </div>{" "}
+      </header>
+      <main className="flex-grow"></main>
     </div>
   );
-};
-
-export default Research;
+}

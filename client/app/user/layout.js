@@ -2,6 +2,8 @@
 import { useContext } from "react";
 import { GlobalStateContext } from "@/components/context/Global";
 import { Sidebar } from "@/components/Sidebar";
+import { LexChatWrapper } from "@/components/LexChatWrapper";
+import { FloatingChatIcon } from "../../components/FloatingChatIcon";
 
 const LoadingScreen = () => (
   <div className="flex items-center justify-center w-full h-screen bg-black text-white">
@@ -31,6 +33,7 @@ const Layout = ({ children }) => {
             }`}
           >
             {children}
+            <FloatingChatIcon />
           </main>
         </div>
       ) : (

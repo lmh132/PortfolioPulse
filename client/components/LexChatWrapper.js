@@ -1,10 +1,13 @@
-"use client"; // Ensure this runs on the client-side
+"use client";
 
-import React, { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-const LexChatWrapper = () => {
+export const LexChatWrapper = ({ isFullPage = false }) => {
+  const containerRef = useRef < HTMLDivElement > null;
+
   useEffect(() => {
-    const scriptId = "lex-chatbot-script"; // Prevent duplicate script insertion
+    const scriptId = "lex-chatbot-script";
+    let lexWebUi = null;
 
     if (!document.getElementById(scriptId)) {
       const script = document.createElement("script");
@@ -18,8 +21,6 @@ const LexChatWrapper = () => {
           baseUrl: "https://d3q9907jwkcy1u.cloudfront.net/",
           shouldLoadMinDeps: true,
         };
-
-        const loader = new window.ChatBotUiLoader.IframeLoader(loaderOpts); // Chatbot configuration
 
         const chatbotUiConfig = {
           region: "us-east-1",
@@ -55,23 +56,43 @@ const LexChatWrapper = () => {
             shouldLoadIframeMinimized: false,
             iframeSrcPath: "/index.html#/?lexWebUiEmbed=true",
           },
-        }; // Load the chatbot
+        };
 
-        loader.load(chatbotUiConfig).catch((error) => {
-          console.error("Chatbot UI failed to load", error);
-        });
+        const loader = new window.ChatBotUiLoader.IframeLoader(loaderOpts);
+
+        if (containerRef.current) {
+          loader
+            .load(chatbotUiConfig)
+            .then((lexWebUiInstance) => {
+              lexWebUi = lexWebUiInstance;
+              containerRef.current?.appendChild(lexWebUi.iframe);
+            })
+            .catch((error) => {
+              console.error("Chatbot UI failed to load", error);
+            });
+        }
       };
 
       document.body.appendChild(script);
     }
 
     return () => {
+      if (lexWebUi && lexWebUi.iframe && containerRef.current) {
+        containerRef.current.removeChild(lexWebUi.iframe);
+      }
       const script = document.getElementById(scriptId);
       if (script) {
         document.body.removeChild(script);
       }
     };
-  }, []);
-};
+  }, [isFullPage]);
 
-export default LexChatWrapper;
+  return (
+    <div
+      ref={containerRef}
+      className={`lex-web-ui-iframe ${
+        isFullPage ? "h-screen w-full" : "fixed bottom-4 right-4 w-96 h-[600px]"
+      }`}
+    />
+  );
+};

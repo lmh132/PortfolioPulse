@@ -14,7 +14,7 @@ export const Routing = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setAuthUser(user);
-        router.push("/user/home");
+        router.push("/user/watchlist");
       } else {
         setAuthUser(false);
       }

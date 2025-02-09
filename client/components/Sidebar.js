@@ -21,10 +21,9 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebaseconfig";
 
 const menuItems = [
-  { id: 1, label: "Home", icon: Home, link: "/user/home" },
+  { id: 1, label: "Watchlist", icon: Home, link: "/user/watchlist" },
   { id: 2, label: "News", icon: Newspaper, link: "/user/news" },
-  // { id: 3, label: "Research", icon: BookOpen, link: "/user/research" },
-  { id: 4, label: "Watchlist", icon: EyeIcon, link: "/user/watchlist" },
+  { id: 3, label: "Research", icon: BookOpen, link: "/user/research" },
 ];
 
 export const Sidebar = () => {
