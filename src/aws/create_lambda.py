@@ -56,7 +56,7 @@ def lambda_handler(event, context):
     articles = []
 
     # Create multiple articles (you can change the number of articles)
-    for _ in range(5):  # This will generate 5 articles, modify as needed
+    for _ in range(250):  # This will generate 5 articles, modify as needed
         article_id = str(article_id_counter)
         article_id_counter += 1
         

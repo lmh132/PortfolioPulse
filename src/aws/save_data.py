@@ -4,7 +4,35 @@ import zipfile
 import os
 import time
 from decimal import Decimal
+import subprocess
 
+
+def delete_data(dynamodb):
+
+    table = dynamodb.Table('DataLake')  # Replace with your table name
+
+    response = table.scan()
+    items = response.get('Items', [])
+
+    for item in items:
+        table.delete_item(
+            Key={
+                'ArticleID': item['ArticleID'],  # Replace with the actual partition key name
+            }
+        )
+
+
+    while 'LastEvaluatedKey' in response:
+        response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+        items = response.get('Items', [])
+        
+        for item in items:
+            table.delete_item(
+                Key={
+                    'ArticleID': item['ArticleID'],
+                }
+            )
+            print(f"Deleted item with Partition Key: {item['ArticleID']}")
 def decimal_to_float(obj):
     if isinstance(obj, Decimal):
         return float(obj)
@@ -28,28 +56,21 @@ def main():
         InvocationType='RequestResponse'
     )
 
+
+    delete_data(dynamodb)
+
     response_payload = json.loads(json.loads(response['Payload'].read())["body"])
     articles = response_payload
     
     for article in articles:
         article['Timestamp'] = int(time.time()) 
         table.put_item(Item=article)
-
+    '''
     response = table.scan()
-    items = response['Items']
-
-    items.sort(key=lambda x: x['Timestamp'])
-
-    if len(items) > 20:
-        items_to_delete = items[:len(items) - 20]  
-        for item in items_to_delete:
-            article_id = item['ArticleID']  
-            table.delete_item(Key={'ArticleID': article_id}) 
-            print(f"Deleted item with ArticleID: {article_id}")
-
     for item in response['Items']:
         item = decimal_to_float(item)
         print(json.dumps(item, indent=4))  # Pretty print each item
+    '''
 
 if __name__ == "__main__":
     main()
