@@ -1,6 +1,6 @@
 import { ChatComponent } from "@/components/ChatComponent";
 
-export const Research = ({ children }) => {
+export const Research = () => {
   return (
     <div className="flex flex-col h-screen">
       <header className="p-4">
