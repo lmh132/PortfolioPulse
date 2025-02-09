@@ -1,7 +1,7 @@
 from openai import OpenAI
 import google
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 
 def get_response(text):
     prompt = """
