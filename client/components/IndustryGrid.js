@@ -36,7 +36,7 @@ export function IndustryGrid({}) {
               passHref
             >
               <motion.div
-                className="flex flex-col items-center justify-center p-10 bg-white rounded-xl shadow-lg cursor-pointer w-48 h-48" // Increased size
+                className="flex flex-col items-center justify-center p-10 bg-gray-300 rounded-xl shadow-lg cursor-pointer w-48 h-48" // Increased size
                 whileHover={{
                   scale: 1.05,
                   boxShadow: "0px 0px 8px rgba(0,0,0,0.2)",
