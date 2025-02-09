@@ -67,6 +67,7 @@ def lambda_handler(event, context):
             "Author": "Taein Kim",
             "Description": "ABC",
             "URL": "www.google.com",
+            "ImageURL" : "dummy",
             "Industry": "Technology",
             "Company": "Google",
             "TimePub": "10:00",
