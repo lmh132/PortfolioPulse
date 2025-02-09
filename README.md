@@ -1,5 +1,6 @@
 ## Frontend + Authentication
 ### Frontend
+This is a NextJS project along with Firebase for authentication. After going through the login flow, users are redirected to the watchlist page (/user/watchlist) where they can see articles relevant to them and the stocks/industries they follow. We also provide the news page (/user/news) where users can see live feeds of important news pertaining relevant stocks. In the research tab, an AI assistant will provide insights into the stocks.
 ### Authentication
 We used Google Firebase as the authentication service for our webapp. Users can sign up through a quick email and password system, after which their account will automatically be created in the user database. 
 ## CRUD
