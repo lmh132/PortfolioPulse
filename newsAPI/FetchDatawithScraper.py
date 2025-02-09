@@ -22,7 +22,7 @@ def fetch_full_content(url):
         print(f"Error fetching {url}: {e}")
         return "Content not available"
 
-def fetch_articles(company, api_key, page_size=20, language='en', use_top_headlines=False):
+def fetch_articles(company, api_key, page_size=1, language='en', use_top_headlines=False):
     sources = ["cnbc.com", "bloomberg.com", "apnews.com"]
     articles_by_source = {source: [] for source in sources}
     
@@ -99,7 +99,7 @@ def aggregate_articles(companies, api_key, use_top_headlines=False):
     return all_articles
 
 def main():
-    API_KEY = "c976dc50759c4560bc121444ad0b82b1"
+    API_KEY = "74038f7e4cfb48da88b7ebeed400b739"
     use_top_headlines = False
     companies = {
         "Technology": ["Apple", "Microsoft", "Alphabet", "NVIDIA", "Meta"],

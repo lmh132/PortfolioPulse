@@ -1,4 +1,5 @@
 from openai import OpenAI
+import google
 
 client = OpenAI(api_key="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")
 
@@ -29,4 +30,6 @@ def get_response(text):
 
     return completion.choices[0].message.content
 
-print(get_response(""))
+input = "nvidia has blown up over night, literally. A terrorist blew up the leading semiconductor manufacturer's largest factory last night."
+
+print(get_response(input))

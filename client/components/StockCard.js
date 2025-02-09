@@ -1,5 +1,5 @@
 import { ArrowUp, ArrowDown } from "lucide-react";
-import { useContext } from "react";
+import { use, useContext, useMemo } from "react";
 import { GlobalStateContext } from "./context/Global";
 import Link from "next/link";
 
@@ -16,8 +16,8 @@ const getIndustryColor = (industry) => {
 
 export default function StockTicker({ symbol, industry }) {
   const { setSearchFilter, setIndustryFilter } = useContext(GlobalStateContext);
-  const price = 10;
-  const changePercent = 5;
+  const price = useMemo(() => Math.random() * 1000, [symbol]);
+  const changePercent = useMemo(() => Math.random() * 10 - 5, [symbol]);
   const isUp = changePercent > 0;
 
   return (
@@ -52,7 +52,9 @@ export default function StockTicker({ symbol, industry }) {
           ) : (
             <ArrowDown className="w-6 h-6 mr-1 transition-transform duration-300" />
           )}
-          <span className="text-xl font-semibold">{changePercent}%</span>
+          <span className="text-xl font-semibold">
+            {changePercent.toFixed(2)}%
+          </span>
         </div>
       </Link>
     </div>
