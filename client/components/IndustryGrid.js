@@ -3,11 +3,12 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Cpu, Heart, DollarSign, Zap, ShoppingCart } from "lucide-react";
-
+import { useContext, useEffect } from "react";
+import { GlobalStateContext } from "./context/Global";
 const industries = [
-  { name: "Technology", icon: Cpu, link: "/technology" },
+  { name: "Tech", icon: Cpu, link: "/technology" },
   { name: "Healthcare", icon: Heart, link: "/healthcare" },
-  { name: "Financials", icon: DollarSign, link: "/financials" },
+  { name: "Finance", icon: DollarSign, link: "/financials" },
   { name: "Energy", icon: Zap, link: "/energy" },
   {
     name: "Consumer Discretionary",
@@ -16,33 +17,36 @@ const industries = [
   },
 ];
 
-export function IndustryGrid({ industryList }) {
+export function IndustryGrid({}) {
+  const { industryList } = useContext(GlobalStateContext);
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
-      {industries
-        .filter((industry) => industryList.includes(industry.name))
-        .map((industry) => (
-          <Link key={industry.name} href={industry.link} passHref>
-            <motion.div
-              className="flex flex-col items-center justify-center p-6 bg-white rounded-lg shadow-md cursor-pointer"
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0px 0px 8px rgba(0,0,0,0.2)",
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
+    <div className="flex justify-end">
+      <div className="flex flex-row gap-4">
+        {industries
+          .filter((industry) => industryList.includes(industry.name))
+          .map((industry) => (
+            <Link key={industry.name} href={industry.link} passHref>
               <motion.div
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.5 }}
+                className="flex flex-col items-center justify-center p-10 bg-white rounded-xl shadow-lg cursor-pointer w-48 h-48" // Increased size
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0px 0px 8px rgba(0,0,0,0.2)",
+                }}
+                whileTap={{ scale: 0.95 }}
               >
-                <industry.icon className="w-12 h-12 text-primary mb-2" />
+                <motion.div
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <industry.icon className="w-12 h-12 text-primary mb-2" />
+                </motion.div>
+                <span className="text-sm font-medium text-center text-black">
+                  {industry.name}
+                </span>
               </motion.div>
-              <span className="text-sm font-medium text-center text-black">
-                {industry.name}
-              </span>
-            </motion.div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+      </div>
     </div>
   );
 }

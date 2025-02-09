@@ -64,8 +64,6 @@ export const SignupForm = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
-      console.log("Signup successful!");
-      console.log("User Details:", values);
       // Optionally store first and last name in your database
     } catch (error) {
       console.error("Signup failed:", error);
@@ -94,7 +92,11 @@ export const SignupForm = () => {
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter your first name" {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Enter your first name"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,7 +109,11 @@ export const SignupForm = () => {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter your last name" {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Enter your last name"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -120,7 +126,11 @@ export const SignupForm = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="Enter your email" {...field} />
+                      <Input
+                        type="email"
+                        placeholder="Enter your email"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -133,7 +143,11 @@ export const SignupForm = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Enter your password" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="Enter your password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -146,7 +160,11 @@ export const SignupForm = () => {
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Confirm your password" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="Confirm your password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

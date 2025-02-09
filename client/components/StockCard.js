@@ -11,7 +11,7 @@ const getIndustryColor = (industry) => {
   return colors[industry] || "text-gray-400"; // Default color if industry not found
 };
 
-export default async function StockTicker({ symbol, industry }) {
+export default function StockTicker({ symbol, industry }) {
   const price = 10;
   const changePercent = 5;
   const isUp = changePercent > 0;

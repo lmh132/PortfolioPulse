@@ -35,17 +35,12 @@ export const Sidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(isCollapsed);
-    console.log(authUser);
-    console.log("set collapse callback: ", setIsCollapsed);
-  });
   const handleLogout = async () => {
     try {
       await signOut(auth);
       router.push("/"); // Redirect to the login page after logout
     } catch (error) {
-      console.error("Logout failed:", error);
+      //console.error("Logout failed:", error);
     }
   };
 

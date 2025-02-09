@@ -1,8 +1,42 @@
+"use client";
 import ArticleList from "../../../components/ArticleList";
 import StockCard from "@/components/StockCard";
-import WatchlistAdd from "@/components/WatchlistAdd";
+import { Button } from "@/components/ui/button";
+import { useState, useContext } from "react";
+import { GlobalStateContext } from "@/components/context/Global";
 import { IndustryGrid } from "../../../components/IndustryGrid";
+import { WatchlistAddModal } from "../../../components/WatchlistAddModal";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
+
 const Watchlist = () => {
+  const {
+    isCollapsed,
+    setIsCollapsed,
+    stockList,
+    setStockList,
+    industryList,
+    setIndustryList,
+  } = useContext(GlobalStateContext);
+
+  const handleAdd = ({ type, selection }) => {
+    if (type === "stock") {
+      setStockList([...stockList, selection]);
+    } else {
+      //console.log("selection: ", selection);
+      //console.log("callback: ", setIndustryList);
+      setIndustryList([...industryList, selection]);
+      //console.log("industryList: ", industryList);
+    }
+    //console.log(industryList);
+  };
+  const [open, setOpen] = useState(false);
   const articles = [
     {
       ArticleID: "Apple_1",
@@ -57,21 +91,38 @@ const Watchlist = () => {
   ];
 
   return (
-    <div className="min-h-screen h-full bg-black text-white p-6 flex flex-col">
+    <div className=" text-white p-6 flex overflow-visible flex-col">
       <div className="max-w-full mx-auto mb-6">
-        <h1 className="text-4xl font-bold mb-8">Catch Up</h1>
+        <div className="flex justify-between flex-row">
+          <h1 className="text-4xl font-bold mb-8">Catch Up</h1>
+
+          <Button className="bg-white text-black" onClick={() => setOpen(true)}>
+            Add to Watchlist
+          </Button>
+
+          <WatchlistAddModal
+            open={open}
+            setOpen={setOpen}
+            onSubmit={handleAdd}
+            availableStocks={[
+              { name: "Nvidia", ticker: "NVDA" },
+              { ticker: "TSLA", name: "Tesla" },
+              { ticker: "GOOGL", name: "Alphabet" },
+            ]}
+          />
+        </div>
         <ArticleList articles={articles} />
       </div>
-      <div className="mt-4">
-        <h1 className="text-4xl font-bold mb-8">Your Watchlist </h1>
-        <div className="flex flex-row w-full">
-          <div className="w-2/5">
-            <StockCard symbol="NVDA" industry="Technology" />
+      <div className="mt-2">
+        <h1 className="text-4xl font-bold">Your Watchlist </h1>
+        <div className="mt-2 flex flex-row w-full gap-2">
+          <div className="w-2/5 flex flex-col gap-2">
+            {stockList.map((stock, index) => (
+              <StockCard key={index} symbol={stock} industry="Technology" />
+            ))}
           </div>
-          <div className="w-full">
-            <IndustryGrid
-              industryList={["Technology", "Financials", "Energy"]}
-            />
+          <div className="w-full ml-2">
+            <IndustryGrid />
           </div>
         </div>
       </div>
