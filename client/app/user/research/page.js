@@ -1,6 +1,6 @@
 import { ChatComponent } from "@/components/ChatComponent";
 
-export default function ResearchLayout({ children }) {
+export const Research = ({ children }) => {
   return (
     <div className="flex flex-col h-screen">
       <header className="p-4">
