@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -29,6 +29,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../firebase/firebaseconfig";
 import { storeUserInAWS, getUser } from "@/utils/auth";
+import { GlobalStateContext } from "@/components/context/Global";
 
 // Define schemas for login and signup
 const loginSchema = z.object({
@@ -77,9 +78,6 @@ export const LoginForm = () => {
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, values.email, values.password);
-        const user = await getUser(auth.currentUser.uid);
-        setIndustryList(user.industryList);
-        setStockList(user.stockList);
         //console.log("Found user: ", user);
       } else {
         const userCredential = await createUserWithEmailAndPassword(

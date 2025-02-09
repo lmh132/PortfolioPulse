@@ -21,9 +21,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <GlobalStateProvider>
-      <html lang="en">
+      <html lang="en" className="overflow-hidden h-full">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-auto h-full`}
         >
           {children}
         </body>

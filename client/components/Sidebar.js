@@ -25,8 +25,6 @@ const menuItems = [
   { id: 2, label: "News", icon: Newspaper, link: "/user/news" },
   { id: 3, label: "Research", icon: BookOpen, link: "/user/research" },
   { id: 4, label: "Watchlist", icon: EyeIcon, link: "/user/watchlist" },
-  { id: 5, label: "Portfolio", icon: Briefcase, link: "/user/portfolio" },
-  { id: 6, label: "Trade", icon: BarChart2, link: "/user/trade" },
 ];
 
 export const Sidebar = () => {

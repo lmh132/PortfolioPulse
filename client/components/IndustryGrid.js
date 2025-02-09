@@ -18,14 +18,23 @@ const industries = [
 ];
 
 export function IndustryGrid({}) {
-  const { industryList } = useContext(GlobalStateContext);
+  const { industryList, setIndustryFilter, setSearchFilter } =
+    useContext(GlobalStateContext);
   return (
     <div className="flex justify-end">
       <div className="flex flex-row gap-4">
         {industries
           .filter((industry) => industryList.includes(industry.name))
           .map((industry) => (
-            <Link key={industry.name} href={industry.link} passHref>
+            <Link
+              key={industry.name}
+              href={"/user/news"}
+              onClick={() => {
+                setSearchFilter("");
+                setIndustryFilter(industry.name);
+              }}
+              passHref
+            >
               <motion.div
                 className="flex flex-col items-center justify-center p-10 bg-white rounded-xl shadow-lg cursor-pointer w-48 h-48" // Increased size
                 whileHover={{
