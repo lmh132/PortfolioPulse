@@ -1,6 +1,6 @@
 import { ChatComponent } from "@/components/ChatComponent";
 
-export const Research = () => {
+const Research = () => {
   return (
     <div className="flex flex-col h-screen">
       <header className="p-4">
@@ -15,3 +15,5 @@ export const Research = () => {
     </div>
   );
 }
+
+export default Research;
