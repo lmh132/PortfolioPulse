@@ -26,9 +26,11 @@ import { AlertCircle } from "lucide-react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebaseconfig";
 
-// ✅ Zod Schema for Signup Validation
+// ✅ Updated Zod Schema for Signup Validation
 const formSchema = z
   .object({
+    firstName: z.string().min(1, { message: "First name is required" }),
+    lastName: z.string().min(1, { message: "Last name is required" }),
     email: z.string().email({ message: "Invalid email address" }),
     password: z
       .string()
@@ -37,7 +39,7 @@ const formSchema = z
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["confirmPassword"], // Show error on confirmPassword field
+    path: ["confirmPassword"],
   });
 
 export const SignupForm = () => {
@@ -47,6 +49,8 @@ export const SignupForm = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -60,8 +64,7 @@ export const SignupForm = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
-      console.log("Signup successful!");
-      // Optionally redirect or show a success message
+      // Optionally store first and last name in your database
     } catch (error) {
       console.error("Signup failed:", error);
       setError(error.message || "Failed to sign up. Please try again later.");
@@ -82,6 +85,40 @@ export const SignupForm = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Enter your first name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Enter your last name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
@@ -109,7 +146,6 @@ export const SignupForm = () => {
                       <Input
                         type="password"
                         placeholder="Enter your password"
-                        className=""
                         {...field}
                       />
                     </FormControl>
@@ -122,9 +158,7 @@ export const SignupForm = () => {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-black">
-                      Confirm Password
-                    </FormLabel>
+                    <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"

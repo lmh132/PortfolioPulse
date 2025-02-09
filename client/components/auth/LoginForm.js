@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useContext } from "react";
+import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,8 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../../firebase/firebaseconfig";
+import { storeUserInAWS, getUser } from "@/utils/auth";
+import { GlobalStateContext } from "@/components/context/Global";
 
 // Define schemas for login and signup
 const loginSchema = z.object({
@@ -39,6 +41,8 @@ const loginSchema = z.object({
 
 const signupSchema = z
   .object({
+    firstName: z.string().min(1, { message: "First name is required" }),
+    lastName: z.string().min(1, { message: "Last name is required" }),
     email: z.string().email({ message: "Invalid email address" }),
     password: z
       .string()
@@ -51,6 +55,7 @@ const signupSchema = z
   });
 
 export const LoginForm = () => {
+  const { setIndustryList, setStockList } = useContext(GlobalStateContext);
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -58,6 +63,8 @@ export const LoginForm = () => {
   const form = useForm({
     resolver: zodResolver(isLogin ? loginSchema : signupSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -71,11 +78,19 @@ export const LoginForm = () => {
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, values.email, values.password);
+        //console.log("Found user: ", user);
       } else {
-        await createUserWithEmailAndPassword(
+        const userCredential = await createUserWithEmailAndPassword(
           auth,
           values.email,
           values.password
+        );
+        const user = userCredential.user;
+        await storeUserInAWS(
+          user.uid,
+          values.firstName,
+          values.lastName,
+          values.email
         );
       }
     } catch (error) {
@@ -102,6 +117,44 @@ export const LoginForm = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              {!isLogin && (
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Enter your first name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {!isLogin && (
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Enter your last name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name="email"

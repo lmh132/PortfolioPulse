@@ -36,7 +36,8 @@ const ArticleCard = ({ article }) => {
               </span>
             </p>
             <p className="text-gray-600">
-              <strong>Company:</strong> {article.Company || "N/A"}
+              <strong>Companies:</strong>{" "}
+              {article.Companies?.join(",") || "N/A"}
             </p>
           </div>
         </CardContent>
